@@ -952,7 +952,7 @@ var RuleEngine = /*#__PURE__*/function () {
 
             case 1:
               if (!(i < this.rules.length)) {
-                _context.next = 7;
+                _context.next = 8;
                 break;
               }
 
@@ -960,11 +960,14 @@ var RuleEngine = /*#__PURE__*/function () {
               return this.rules[i].run(tx);
 
             case 4:
+              console.log("\n");
+
+            case 5:
               i++;
               _context.next = 1;
               break;
 
-            case 7:
+            case 8:
             case "end":
               return _context.stop();
           }
@@ -982,59 +985,69 @@ var RuleEngine = /*#__PURE__*/function () {
   return RuleEngine;
 }();
 
+var logModuleHeader = function logModuleHeader(name) {
+  console.log("=====" + "=".repeat(name.length) + "=====");
+  console.log("==== " + name + " ====");
+  console.log("=====" + "=".repeat(name.length) + "=====");
+};
+var truncateAddress = function truncateAddress(address) {
+  var start = address.substring(0, 5);
+  var end = address.substring(38);
+  return start + "..." + end;
+};
+
 /**
  * The ENS rule attempts lookup any ENS names assosiated with the
  * addresses used in the transaction.
  */
 
-var EtherscanRules = /*#__PURE__*/function () {
-  function EtherscanRules(provider) {
+var EnsRules = /*#__PURE__*/function () {
+  function EnsRules(provider) {
+    this.moduleName = "ENS Rule Module";
     this.provider = provider;
   }
 
-  var _proto = EtherscanRules.prototype;
+  var _proto = EnsRules.prototype;
 
   _proto.run = /*#__PURE__*/function () {
     var _run = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/runtime_1.mark(function _callee(tx) {
-      var verified, url, res;
+      var to, from;
       return runtime_1.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              if (!tx.from) {
+                _context.next = 4;
+                break;
+              }
+
+              _context.next = 3;
+              return this.provider.lookupAddress(tx.from);
+
+            case 3:
+              from = _context.sent;
+
+            case 4:
               if (!tx.to) {
                 _context.next = 8;
                 break;
               }
 
-              url = "https://api.etherscan.io/api?module=contract&action=getabi&address=" + tx.to;
-              _context.next = 4;
-              return axios.get(url);
+              _context.next = 7;
+              return this.provider.lookupAddress(tx.to);
 
-            case 4:
-              res = _context.sent;
-              console.log(res.data);
-
-              if (res.data.status === "0") {
-                verified = false;
-              } else if (res.data.status === "1") {
-                verified = true;
-              }
-
-              console.log({
-                verified: verified
-              });
+            case 7:
+              to = _context.sent;
 
             case 8:
-              return _context.abrupt("return", {
-                result: {}
-              });
+              this.log(tx, to, from);
 
             case 9:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee);
+      }, _callee, this);
     }));
 
     function run(_x) {
@@ -1043,6 +1056,104 @@ var EtherscanRules = /*#__PURE__*/function () {
 
     return run;
   }();
+
+  _proto.log = function log(tx, to, from) {
+    logModuleHeader(this.moduleName);
+
+    if (from) {
+      console.log("From: " + from + " (" + truncateAddress(tx.from) + ")");
+    } else {
+      console.log("From: " + tx.from);
+    }
+
+    if (to) {
+      console.log("To: " + to + " (" + truncateAddress(tx.to) + ")");
+    } else if (tx.to) {
+      console.log("To: " + tx.to);
+    } else {
+      console.log("To: [Contract creation]");
+    }
+  };
+
+  return EnsRules;
+}();
+
+/**
+ * The ENS rule attempts lookup any ENS names assosiated with the
+ * addresses used in the transaction.
+ */
+
+var EtherscanRules = /*#__PURE__*/function () {
+  function EtherscanRules(provider) {
+    this.moduleName = "Etherscan Rule Module";
+    this.provider = provider;
+  }
+
+  var _proto = EtherscanRules.prototype;
+
+  _proto.run = /*#__PURE__*/function () {
+    var _run = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/runtime_1.mark(function _callee(tx) {
+      var verified, code, url, res;
+      return runtime_1.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              if (!tx.to) {
+                _context.next = 10;
+                break;
+              }
+
+              _context.next = 3;
+              return this.provider.getCode(tx.to);
+
+            case 3:
+              code = _context.sent;
+
+              if (!(code != "0x")) {
+                _context.next = 10;
+                break;
+              }
+
+              url = "https://api.etherscan.io/api?module=contract&action=getabi&address=" + tx.to;
+              _context.next = 8;
+              return axios.get(url);
+
+            case 8:
+              res = _context.sent;
+
+              if (res.data.status === "0") {
+                verified = false;
+              } else if (res.data.status === "1") {
+                verified = true;
+              }
+
+            case 10:
+              this.log(verified);
+
+            case 11:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    }));
+
+    function run(_x) {
+      return _run.apply(this, arguments);
+    }
+
+    return run;
+  }();
+
+  _proto.log = function log(verified) {
+    logModuleHeader(this.moduleName);
+
+    if (verified) {
+      console.log("The contract is verified.");
+    } else {
+      console.log("The contract is not verified.");
+    }
+  };
 
   return EtherscanRules;
 }();
@@ -1055,7 +1166,7 @@ var options = /*#__PURE__*/program.opts(); // Setup proxy and rules
 var provider = /*#__PURE__*/new ethers.providers.JsonRpcProvider({
   url: options.rpc
 });
-var rules = [/*#__PURE__*/new EtherscanRules(provider)];
+var rules = [/*#__PURE__*/new EnsRules(provider), /*#__PURE__*/new EtherscanRules(provider)];
 var ruleEngine = /*#__PURE__*/new RuleEngine(rules);
 var proxy = /*#__PURE__*/new Proxy(provider, ruleEngine); // Proxy server Logic
 

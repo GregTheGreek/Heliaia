@@ -1,11 +1,8 @@
 import ethers, { Transaction } from "ethers";
-export interface RuleResponse {
-    result: any;
-    error?: string;
-}
 export interface Rule {
+    moduleName: string;
     provider: ethers.providers.JsonRpcProvider;
-    run(tx: Transaction): Promise<RuleResponse>;
+    run(tx: Transaction): Promise<void>;
 }
 export declare class RuleEngine {
     rules: Rule[];

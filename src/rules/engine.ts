@@ -1,13 +1,9 @@
 import ethers, { Transaction } from "ethers";
 
-export interface RuleResponse {
-    result: any; // @todo
-    error?: string;
-}
-
 export interface Rule {
+    moduleName: string;
     provider: ethers.providers.JsonRpcProvider;
-    run(tx: Transaction): Promise<RuleResponse>;
+    run(tx: Transaction): Promise<void>;
 }
 
 export class RuleEngine {
@@ -22,10 +18,9 @@ export class RuleEngine {
     }
 
     async run(tx: Transaction): Promise<void> {
-        const results = [];
         for (let i=0; i < this.rules.length; i++) {
-            results.push(await this.rules[i].run(tx));
+            await this.rules[i].run(tx);
+            console.log("\n")
         }
-        // @TODO Parse responses
     }
 }

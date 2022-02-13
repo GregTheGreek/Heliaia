@@ -4,6 +4,7 @@ import express from 'express';
 
 import {Proxy} from "./proxy";
 import { RuleEngine } from './rules/engine';
+import { EnsRules } from './rules/ens';
 import { EtherscanRules } from './rules/etherscan';
 
 // CLI
@@ -18,6 +19,7 @@ const options = program.opts();
 // Setup proxy and rules
 const provider = new ethers.providers.JsonRpcProvider({ url: options.rpc });
 const rules = [
+  new EnsRules(provider),
   new EtherscanRules(provider),
 ]
 const ruleEngine = new RuleEngine(rules);
