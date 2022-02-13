@@ -1,10 +1,10 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { Transaction } from "ethers";
-import { Rule } from "./engine";
-import { logModuleHeader, truncateAddress } from "./utils";
+import { Rule } from "../engine";
+import { logModuleHeader, truncateAddress } from "../utils";
 
 /**
- * The ENS rule attempts lookup any ENS names assosiated with the
+ * The ENS module attempts lookup any ENS names assosiated with the
  * addresses used in the transaction.
  */
 export class EnsRules implements Rule {
