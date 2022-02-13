@@ -9,8 +9,8 @@ Heliaia was the supreme court of ancient Athens, the Heliaia functioned as a cou
 ## Usage
 
 ```
-git clone https://github.com/arachnid/flashbots-proxy.git
-cd flashbots-proxy
+git clone https://github.com/GregTheGreek/Heliaia.git
+cd Heliaia
 yarn
 yarn start [args]
 ```
@@ -32,7 +32,7 @@ When rules are run, they'll appear in the terminal like so:
 ==== ENS Rule Module ====
 =========================
 From: 0xCC71BBe481A50b9fb36afD36aE6EF63FE8eD94bB
-To: nick.eth (0x441...7975)
+To: example.eth (0xabc...1234)
 ```
 As a user you can then choose to submit the transaction or reject it:
 ```
