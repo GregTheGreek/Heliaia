@@ -5,8 +5,8 @@ const cors = require("cors");
 
 import {Proxy} from "./proxy";
 import { RuleEngine } from './rules/engine';
-import { EnsRules } from './rules/ens';
-import { EtherscanRules } from './rules/etherscan';
+import { EnsRules } from './rules/generic/ens';
+import { ContractVerificationRules } from './rules/generic/contractVerification';
 
 // CLI
 const program = new Command();
@@ -21,7 +21,7 @@ const options = program.opts();
 const provider = new ethers.providers.JsonRpcProvider({ url: options.rpc });
 const rules = [
   new EnsRules(provider),
-  new EtherscanRules(provider),
+  new ContractVerificationRules(provider),
 ]
 const ruleEngine = new RuleEngine(rules);
 const proxy = new Proxy(provider, ruleEngine);

@@ -45,6 +45,7 @@ Do you want to submit the transaction?
 ```
 
 ## Features
+
 - Ens checks
 - Contract verification 
 - Malicious address (todo)
@@ -56,6 +57,10 @@ Do you want to submit the transaction?
   - Store a config file somewhere?
 - Simulate calls in ganache (todo)
 - ?
+
+## Contributing
+
+There are two types of rules: `Generic rules` and `App rules`. Generic rule sets are general things such as ENS integrations or contract verificaiton. App rules are meant to be application specific such that it can generate in-depth analysis for the user. An example of this would be the uniswap rule, which gives the user a very human readable understanding of what is happening.
 
 ## Inspiration
 
