@@ -5,11 +5,10 @@ import axios from "axios";
 import { isContract, logModuleHeader } from "../utils";
 
 /**
- * The ENS rule attempts lookup any ENS names assosiated with the
- * addresses used in the transaction.
+ * The Contract Verification module attempts to find verified smart contract code.
  */
 export class ContractVerificationRules implements Rule {
-    moduleName = "Etherscan Rule Module";
+    moduleName = "Contract Verification Rule Module";
 
     provider: JsonRpcProvider;
     

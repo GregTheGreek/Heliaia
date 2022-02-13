@@ -6,7 +6,7 @@ import { isContract, logModuleHeader } from "../utils";
 import { knownContracts } from "./knownContracts";
 
 /**
- * The Dapp rule attempts lookup known information about a given address to provide the user
+ * The Dapp module attempts lookup known information about a given address to provide the user
  * with a human readbale understanding of the transaction opperation.
  */
 export class ContractVerificationRules implements Rule {
