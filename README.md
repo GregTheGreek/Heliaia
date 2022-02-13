@@ -48,6 +48,8 @@ Do you want to submit the transaction?
     - 0x0 address?
 - Known contracts (todo)
     - For known contracts describe the interaction in english
+- Allow the user to choose which rules to apply (todo)
+  - Store a config file somewhere?
 - ?
 
 ## Inspiration
