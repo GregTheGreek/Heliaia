@@ -4,7 +4,8 @@ Heliaia is a proxy that sits between your wallet and a node, with the sole purpo
 
 ## Name Origins
 
-Heliaia was the supreme court of ancient Athens, the Heliaia functioned as a court for litigation of public, criminal and private international law. Naturally a fitting name for a tool that adheres to the rules set by the user. I'm also Greek and chose this purely on bias :)
+Heliaia was the supreme court of ancient Athens, the Heliaia functioned as a court for litigation of public, criminal and private international law. Naturally a fitting name for a tool that scrutinizes a transaction to ensure it adhers to a strict set of rules. I'm also Greek and chose this purely on bias :)
+
 ## Usage
 
 ```
