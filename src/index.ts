@@ -1,6 +1,7 @@
 import { Command } from 'commander';
 import ethers from 'ethers';
 import express from 'express';
+const cors = require("cors");
 
 import {Proxy} from "./proxy";
 import { RuleEngine } from './rules/engine';
@@ -28,6 +29,7 @@ const proxy = new Proxy(provider, ruleEngine);
 // Proxy server Logic
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 app.post('/', async (req, res) => {
   const { id, method, params } = req.body;

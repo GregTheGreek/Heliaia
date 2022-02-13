@@ -1158,6 +1158,8 @@ var EtherscanRules = /*#__PURE__*/function () {
   return EtherscanRules;
 }();
 
+var cors = /*#__PURE__*/require("cors");
+
 var program = /*#__PURE__*/new Command();
 program.option('-r --rpc <url>', 'RPC URL to proxy to', 'http://localhost:8545/').option('-p --port <number>', 'Port number to listen on', '9545');
 program.parse(process.argv);
@@ -1172,6 +1174,7 @@ var proxy = /*#__PURE__*/new Proxy(provider, ruleEngine); // Proxy server Logic
 
 var app = /*#__PURE__*/express();
 app.use(express.json());
+app.use(cors());
 app.post('/', /*#__PURE__*/function () {
   var _ref = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/runtime_1.mark(function _callee(req, res) {
     var _req$body, id, method, params, result, _JSON$parse, error;
