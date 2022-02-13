@@ -2,7 +2,7 @@
 
 Heliaia is a proxy that sits between your wallet and a node, with the sole purpose to intercept transactions before they are broadcasted. Transactions are thuroughly analysed by various rules that provide the user with deep insights into what they are signing. Wallet UIs can only present you with so much information before it becomes exhaustive. Heliaia aims to provide a user with an indepth analysis of their transactons to help them make a more informed decision when signing transactions.
 
-TL/DR: If you're paranoide like me, this is the sanity check you need.
+TL/DR: If you're paranoid like me, this is the sanity check you need.
 
 ## Motiviation
 
