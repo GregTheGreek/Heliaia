@@ -22,7 +22,9 @@ export class ContractVerificationRules implements Rule {
         if (tx.to && isContract(this.provider, tx.to)) {
             const info = knownContracts[tx.to];
             if (info) {
-                // @Todo
+                this.log(`Running [${info.name}]`);
+                const rule = new info.module(this.provider) as Rule;
+                rule.run(tx);
             } else {
                 this.log(`No known contract at ${tx.to}`)
             }
