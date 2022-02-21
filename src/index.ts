@@ -7,6 +7,7 @@ import {Proxy} from "./proxy";
 import { RuleEngine } from './rules/engine';
 import { EnsRules } from './rules/generic/ens';
 import { ContractVerificationRules } from './rules/generic/contractVerification';
+import { GanacheEngine } from './rules/generic/ganache';
 
 // CLI
 const program = new Command();
@@ -26,6 +27,10 @@ const rules = [
 const ruleEngine = new RuleEngine(rules);
 const proxy = new Proxy(provider, ruleEngine);
 
+const g = new GanacheEngine("1231");
+g.fork()
+
+process.exit();
 // Proxy server Logic
 const app = express();
 app.use(express.json());
