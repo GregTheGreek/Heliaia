@@ -7,7 +7,8 @@ import {Proxy} from "./proxy";
 import { RuleEngine } from './rules/engine';
 import { EnsRules } from './rules/generic/ens';
 import { ContractVerificationRules } from './rules/generic/contractVerification';
-import { ForkStateRules } from './rules/generic/traceState';
+// import { ForkStateRules } from './rules/generic/traceState';
+import { Erc20Rules } from './rules/erc/erc20';
 
 // CLI
 const program = new Command();
@@ -23,7 +24,8 @@ const provider = new ethers.providers.JsonRpcProvider({ url: options.rpc });
 const rules = [
   new EnsRules(provider),
   new ContractVerificationRules(provider),
-  new ForkStateRules(provider),
+  // new ForkStateRules(provider),
+  new Erc20Rules(provider),
 ];
 const ruleEngine = new RuleEngine(provider, rules);
 const proxy = new Proxy(provider, ruleEngine);

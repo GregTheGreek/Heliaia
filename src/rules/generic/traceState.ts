@@ -1,8 +1,7 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { Transaction } from "ethers";
 import { Rule } from "../engine";
-import { logModuleHeader } from "../utils";
-import ethers from "ethers";
+import { logModuleHeader, serializeTx } from "../utils";
   
 /**
  * The ENS module attempts lookup any ENS names assosiated with the
@@ -23,11 +22,7 @@ export class ForkStateRules implements Rule {
 
     private async log(tx: Transaction): Promise<void> {
         logModuleHeader(this.moduleName);
-        const signedTx = ethers.utils.serializeTransaction(
-            tx, 
-            {r: tx.r as string, s: tx.s as string, v: tx.v as number}
-        );
-        const txResponse = await this.provider.sendTransaction(signedTx);
+        const txResponse = await this.provider.sendTransaction(serializeTx(tx));
         const txReceipt = await txResponse.wait();
         console.log(txReceipt);
         const trace = await this.provider.send("debug_traceTransaction", [txReceipt.transactionHash])
