@@ -9,7 +9,7 @@ import { logModuleHeader, truncateAddress } from "../utils";
  */
 export class EnsRules implements Rule {
     moduleName = "ENS Rule Module";
-
+    useGanache: boolean = false;
     provider: JsonRpcProvider;
 
     constructor(provider: JsonRpcProvider) {

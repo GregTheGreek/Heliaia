@@ -1,24 +1,25 @@
-import { Web3Provider } from "@ethersproject/providers";
+import { JsonRpcProvider } from "@ethersproject/providers";
 import ethers from "ethers";
-import ganache from "ganache";
+import Ganache from "ganache";
 
 /**
  * The Ganache module sanboxes a forking environment.
  */
 export class GanacheEngine {
-    provider: Web3Provider;
+    provider: JsonRpcProvider;
 
     constructor(rpcUrl: string) {
-        this.provider = this.setup(rpcUrl);
+        this.provider = this.fork(rpcUrl);
     }
 
-    private setup = (rpcUrl: string): Web3Provider => {
-        const ganacheProvider = ganache.provider({
+    private fork = (rpcUrl: string): JsonRpcProvider => {
+        console.log("Forking ganache...")
+        const ganacheProvider = Ganache.provider({
             fork: {
                 url: rpcUrl
             },
             miner: {
-                blockTime: 1
+                blockTime: 0
             },
             logging: {
                 logger: {
@@ -30,7 +31,7 @@ export class GanacheEngine {
         return new ethers.providers.Web3Provider(ganacheProvider);       
     }
 
-    fork = async () => {
+    run = async () => {
         console.log(`Created fork at block ${await this.provider.getBlockNumber()}`);
     }
 }

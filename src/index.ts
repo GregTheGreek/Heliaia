@@ -7,7 +7,7 @@ import {Proxy} from "./proxy";
 import { RuleEngine } from './rules/engine';
 import { EnsRules } from './rules/generic/ens';
 import { ContractVerificationRules } from './rules/generic/contractVerification';
-import { GanacheEngine } from './rules/generic/ganache';
+import { ForkStateRules } from './rules/generic/traceState';
 
 // CLI
 const program = new Command();
@@ -23,14 +23,11 @@ const provider = new ethers.providers.JsonRpcProvider({ url: options.rpc });
 const rules = [
   new EnsRules(provider),
   new ContractVerificationRules(provider),
-]
-const ruleEngine = new RuleEngine(rules);
+  new ForkStateRules(provider),
+];
+const ruleEngine = new RuleEngine(provider, rules);
 const proxy = new Proxy(provider, ruleEngine);
 
-const g = new GanacheEngine("1231");
-g.fork()
-
-process.exit();
 // Proxy server Logic
 const app = express();
 app.use(express.json());

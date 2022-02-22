@@ -9,7 +9,7 @@ import { isContract, logModuleHeader } from "../utils";
  */
 export class ContractVerificationRules implements Rule {
     moduleName = "Contract Verification Rule Module";
-
+    useGanache: boolean = false;
     provider: JsonRpcProvider;
     
     constructor(provider: JsonRpcProvider) {
