@@ -1,5 +1,5 @@
 import ethers from "ethers";
-import { RuleEngine } from "./rules/engine";
+import { RuleEngine } from "./engine";
 const prompts = require('prompts');
 
 export class Proxy {

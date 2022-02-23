@@ -60,7 +60,8 @@
     "cors": "^2.8.5",
     "ethers": "^5.5.4",
     "express": "^4.17.2",
-    "ganache": "^7.0.0-alpha.2",
+    "ganache": "^7.0.2",
+    "inquirer": "^8.2.0",
     "prompts": "^2.4.2"
   }
 }

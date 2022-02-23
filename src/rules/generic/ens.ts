@@ -1,6 +1,6 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { Transaction } from "ethers";
-import { Rule } from "../engine";
+import { Rule } from "../../engine";
 import { logModuleHeader, truncateAddress } from "../utils";
 
 /**
@@ -9,7 +9,7 @@ import { logModuleHeader, truncateAddress } from "../utils";
  */
 export class EnsRules implements Rule {
     moduleName = "ENS Rule Module";
-
+    useGanache: boolean = false;
     provider: JsonRpcProvider;
 
     constructor(provider: JsonRpcProvider) {

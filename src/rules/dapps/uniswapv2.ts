@@ -1,7 +1,7 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { Transaction } from "ethers";
 
-import { Rule } from "../engine";
+import { Rule } from "../../engine";
 import { logModuleHeader } from "../utils";
 
 /**
@@ -9,7 +9,7 @@ import { logModuleHeader } from "../utils";
  */
 export class Uniswapv2Rules implements Rule {
     moduleName = "UniswapV2 Rule Module";
-
+    useGanache: boolean = false;
     provider: JsonRpcProvider;
     
     constructor(provider: JsonRpcProvider) {
