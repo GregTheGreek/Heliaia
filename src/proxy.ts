@@ -26,7 +26,7 @@ export class Proxy {
     
     // Run all rules
     await this.ruleEngine.run(tx);
-    console.log("after")
+
     if (!await this.showPrompt()) {
       console.log("Rejecting...")
       return;
