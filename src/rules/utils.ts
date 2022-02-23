@@ -1,5 +1,5 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
-import { Transaction } from "ethers";
+import { BigNumber, Transaction } from "ethers";
 import ethers from "ethers";
 
 export const logModuleHeader = (name: string) => {
@@ -24,4 +24,8 @@ export const serializeTx = (tx: Transaction): string => {
         tx, 
         {r: tx.r as string, s: tx.s as string, v: tx.v as number}
     );
+}
+
+export const formatUnits = (number: BigNumber, decimals: number) => {
+    return ethers.utils.commify(ethers.utils.formatUnits(number, decimals));
 }
