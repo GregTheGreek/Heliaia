@@ -13,14 +13,15 @@ const program = new Command();
 program
   .option('-r --rpc <url>', 'RPC URL to proxy to', 'http://localhost:8545/')
   .option('-p --port <number>', 'Port number to listen on', '9545');
-
 program.parse(process.argv);
 const options = program.opts();
 
 (async () => {
 
-  // Setup proxy and rules
+  // Instantiate provider from cli
   const provider = new ethers.providers.JsonRpcProvider({ url: options.rpc });
+
+  // Prompt user to select rules
   const selectedRules = await selectRules();
   const rules = selectedRules.map((name:string) => {
     // Not sure how to get around typings for this.
@@ -28,14 +29,16 @@ const options = program.opts();
     return new Rules[name](provider);
   })
 
+  // Setup rule engine and proxy
   const ruleEngine = new RuleEngine(provider, rules);
   const proxy = new Proxy(provider, ruleEngine);
 
-  // Proxy server Logic
+  // Proxy server configuration
   const app = express();
   app.use(express.json());
   app.use(cors());
 
+  // Proxy server routes
   app.post('/', async (req, res) => {
     const { id, method, params } = req.body;
     try {
