@@ -60,14 +60,7 @@ export class Erc20Rules implements Rule {
         const txResponse = await this.provider.sendTransaction(serializeTx(tx));
         await txResponse.wait();
         const balanceAfter: ethers.BigNumber = await this.contract.balanceOf(tx.from);
-        
-        // Check the change in balance
-        let diff = BigNumber.from(0);
-        if (balanceAfter.gt(balanceBefore)) {
-            diff = balanceAfter.sub(balanceBefore);
-        } else if (balanceAfter.lt(balanceBefore)) {
-            diff = balanceAfter.sub(balanceBefore);
-        }
+        const diff = balanceAfter.sub(balanceBefore);
 
         return {
             balanceBefore,
