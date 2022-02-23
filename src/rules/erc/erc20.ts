@@ -1,10 +1,16 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
-import { Contract, Transaction } from "ethers";
+import { BigNumber, Contract, Transaction } from "ethers";
 import { Rule } from "../../engine";
-import { isContract, logModuleHeader, serializeTx } from "../utils";
+import { formatUnits, isContract, logModuleHeader, serializeTx } from "../utils";
 import ethers from "ethers";
 
 import { Erc20Interface } from "./interfacces/erc20";
+
+interface Balances {
+    balanceBefore: BigNumber;
+    balanceAfter: BigNumber;
+    diff: BigNumber;
+}
 
 /**
  * The ERC20 module attempts to inform the user about a given token contract.
@@ -28,32 +34,45 @@ export class Erc20Rules implements Rule {
         this.contract = new ethers.Contract(tx.to, Erc20Interface, this.provider);
         
         if (!(await this.isErc20(tx.from))) {
-            this.log("Not an erc20 contract!");
+            this.log();
+            console.log("Not an erc20 contract!");
             return;
         }
         
-        await this.checkBalance(tx);
-        
+        const balances = await this.checkBalance(tx);
+        await this.log(balances)
     }
 
-    private log(msg: string): void {
+    private async log(balances?: Balances): Promise<void> {
         logModuleHeader(this.moduleName);
-        console.log(msg);
+        if (balances) {
+            // @ts-ignore
+            const decimals = await this.contract.decimals();
+            console.log(`Balance Before: ${formatUnits(balances.balanceBefore, decimals)}`)
+            console.log(`Balance After:  ${formatUnits(balances.balanceAfter, decimals)}`)
+            console.log(`Balance Diff:   ${formatUnits(balances.diff, decimals)}`)
+        }
     }
 
-    private async checkBalance(tx: Transaction): Promise<void> {
-        if (!this.contract) return;
+    private async checkBalance(tx: Transaction): Promise<Balances> {
+        if (!this.contract) return {} as Balances;
         const balanceBefore: ethers.BigNumber = await this.contract.balanceOf(tx.from);
         const txResponse = await this.provider.sendTransaction(serializeTx(tx));
         await txResponse.wait();
         const balanceAfter: ethers.BigNumber = await this.contract.balanceOf(tx.from);
         
+        // Check the change in balance
+        let diff = BigNumber.from(0);
         if (balanceAfter.gt(balanceBefore)) {
-            this.log("Increase");
+            diff = balanceAfter.sub(balanceBefore);
         } else if (balanceAfter.lt(balanceBefore)) {
-            this.log("Decrease");
-        } else {
-            this.log("No change");
+            diff = balanceAfter.sub(balanceBefore);
+        }
+
+        return {
+            balanceBefore,
+            balanceAfter,
+            diff
         }
     }
 
