@@ -1,6 +1,6 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { Transaction } from "ethers";
-import { Rule } from "../engine";
+import { Rule } from "../../engine";
 import axios from "axios";
 import { isContract, logModuleHeader } from "../utils";
 

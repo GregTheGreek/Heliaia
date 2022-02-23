@@ -1,7 +1,7 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { Transaction } from "ethers";
 
-import { Rule } from "../engine";
+import { Rule } from "../../engine";
 import { isContract, logModuleHeader } from "../utils";
 import { knownContracts } from "./knownContracts";
 
@@ -11,7 +11,7 @@ import { knownContracts } from "./knownContracts";
  */
 export class ContractVerificationRules implements Rule {
     moduleName = "Dapp Rule Module";
-
+    useGanache: boolean = false;
     provider: JsonRpcProvider;
     
     constructor(provider: JsonRpcProvider) {
@@ -19,7 +19,7 @@ export class ContractVerificationRules implements Rule {
     }
 
     async run(tx: Transaction): Promise<void> {
-        if (tx.to && isContract(this.provider, tx.to)) {
+        if (tx.to && await isContract(this.provider, tx.to)) {
             const info = knownContracts[tx.to];
             if (info) {
                 this.log(`Running [${info.name}]`);

@@ -1,6 +1,6 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { Contract, Transaction } from "ethers";
-import { Rule } from "../engine";
+import { Rule } from "../../engine";
 import { isContract, logModuleHeader, serializeTx } from "../utils";
 import ethers from "ethers";
 
@@ -32,6 +32,17 @@ export class Erc20Rules implements Rule {
             return;
         }
         
+        await this.checkBalance(tx);
+        
+    }
+
+    private log(msg: string): void {
+        logModuleHeader(this.moduleName);
+        console.log(msg);
+    }
+
+    private async checkBalance(tx: Transaction): Promise<void> {
+        if (!this.contract) return;
         const balanceBefore: ethers.BigNumber = await this.contract.balanceOf(tx.from);
         const txResponse = await this.provider.sendTransaction(serializeTx(tx));
         await txResponse.wait();
@@ -44,11 +55,6 @@ export class Erc20Rules implements Rule {
         } else {
             this.log("No change");
         }
-    }
-
-    private log(msg: string): void {
-        logModuleHeader(this.moduleName);
-        console.log(msg);
     }
 
     private async isErc20(address: string): Promise<boolean> {

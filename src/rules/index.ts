@@ -1,2 +1,7 @@
-export * as engine from "./engine";
-export * as ens from "./generic/ens";
+import * as erc from "./erc";
+import * as generic from "./generic";
+
+export default {
+    ...erc,
+    ...generic,
+}

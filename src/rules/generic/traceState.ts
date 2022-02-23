@@ -1,6 +1,6 @@
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { Transaction } from "ethers";
-import { Rule } from "../engine";
+import { Rule } from "../../engine";
 import { logModuleHeader, serializeTx } from "../utils";
   
 /**
@@ -22,10 +22,14 @@ export class ForkStateRules implements Rule {
 
     private async log(tx: Transaction): Promise<void> {
         logModuleHeader(this.moduleName);
-        const txResponse = await this.provider.sendTransaction(serializeTx(tx));
-        const txReceipt = await txResponse.wait();
-        console.log(txReceipt);
-        const trace = await this.provider.send("debug_traceTransaction", [txReceipt.transactionHash])
-        console.log(trace)
+        try {
+            const txResponse = await this.provider.sendTransaction(serializeTx(tx));
+            const txReceipt = await txResponse.wait();
+            console.log(txReceipt);
+            const trace = await this.provider.send("debug_traceTransaction", [txReceipt.transactionHash])
+            console.log(trace)
+        } catch (e) {
+            console.log(e);
+        }
     }
 }

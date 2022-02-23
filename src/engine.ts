@@ -1,5 +1,5 @@
 import ethers, { Transaction } from "ethers";
-import { GanacheEngine } from "./ganache";
+import { GanacheEngine } from "./rules/ganache";
 import { JsonRpcProvider } from "@ethersproject/providers";
 
 export interface Rule {

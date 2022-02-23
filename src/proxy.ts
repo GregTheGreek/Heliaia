@@ -1,5 +1,5 @@
 import ethers from "ethers";
-import { RuleEngine } from "./rules/engine";
+import { RuleEngine } from "./engine";
 const prompts = require('prompts');
 
 export class Proxy {
@@ -26,7 +26,7 @@ export class Proxy {
     
     // Run all rules
     await this.ruleEngine.run(tx);
-
+    console.log("after")
     if (!await this.showPrompt()) {
       console.log("Rejecting...")
       return;
